@@ -1,0 +1,27 @@
+from itertools import permutations
+
+# Distance matrix: cost[i][j] is distance from city i to j
+cost = [
+    [0, 10, 15, 20],  # Distances from city 0 to others
+    [10, 0, 35, 25],  # city 1
+    [15, 35, 0, 30],  # city 2
+    [20, 25, 30, 0]   # city 3
+]
+
+n = len(cost)
+cities = list(range(n))
+min_path = None
+min_cost = float('inf')
+
+# Try all permutations of cities (except starting point)
+for perm in permutations(cities[1:]):
+    path = [0] + list(perm) + [0]  # start and end at city 0
+    total_cost = sum(cost[path[i]][path[i + 1]] for i in range(n))
+
+    if total_cost < min_cost:
+        min_cost = total_cost
+        min_path = path
+
+# Output the shortest path and its cost
+print("Minimum cost path:", ' -> '.join(map(str, min_path)))
+print("Total cost:", min_cost)
