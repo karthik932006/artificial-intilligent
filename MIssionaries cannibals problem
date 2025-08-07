@@ -1,0 +1,63 @@
+from collections import deque
+
+# Define initial and goal state
+initial_state = (3, 3, 1)  # (Missionaries, Cannibals, Boat position: 1 for left, 0 for right)
+goal_state = (0, 0, 0)
+
+# All possible moves
+moves = [(1, 0), (2, 0), (0, 1), (0, 2), (1, 1)]
+
+# Check if state is valid
+def is_valid(state):
+    m, c, _ = state
+    m_right = 3 - m
+    c_right = 3 - c
+
+    if m < 0 or c < 0 or m > 3 or c > 3:
+        return False
+    if m > 0 and m < c:
+        return False
+    if m_right > 0 and m_right < c_right:
+        return False
+    return True
+
+# BFS to solve the problem
+def solve():
+    visited = set()
+    queue = deque()
+    queue.append((initial_state, []))
+
+    while queue:
+        current_state, path = queue.popleft()
+        if current_state == goal_state:
+            return path + [current_state]
+
+        if current_state in visited:
+            continue
+        visited.add(current_state)
+
+        m, c, boat = current_state
+
+        for move in moves:
+            dm, dc = move
+            if boat == 1:
+                new_state = (m - dm, c - dc, 0)
+            else:
+                new_state = (m + dm, c + dc, 1)
+
+            if is_valid(new_state):
+                queue.append((new_state, path + [current_state]))
+
+    return None
+
+# Run and print solution
+solution = solve()
+
+if solution:
+    print("Steps to solve Missionaries and Cannibals problem:")
+    for step in solution:
+        m, c, b = step
+        side = "Left" if b == 1 else "Right"
+        print(f"Missionaries: {m}, Cannibals: {c}, Boat on: {side}")
+else:
+    print("No solution found.")
