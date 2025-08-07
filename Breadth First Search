@@ -1,0 +1,29 @@
+from collections import deque
+
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    result = []
+
+    while queue:
+        node = queue.popleft()
+        if node not in visited:
+            visited.add(node)
+            result.append(node)
+            queue.extend(neighbor for neighbor in graph[node] if neighbor not in visited)
+
+    return result
+
+# Example graph as adjacency list
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+
+# Start BFS from node 'A'
+output = bfs(graph, 'A')
+print("BFS Traversal:", output)
