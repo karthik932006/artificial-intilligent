@@ -1,0 +1,61 @@
+# Tic Tac Toe Game in Python
+
+# Create the board
+board = [' ' for _ in range(9)]
+
+# Print the board
+def print_board():
+    print()
+    for i in range(3):
+        print(" " + board[3*i] + " | " + board[3*i+1] + " | " + board[3*i+2])
+        if i < 2:
+            print("---|---|---")
+    print()
+
+# Check for winner
+def check_winner(player):
+    win_conditions = [
+        [0,1,2], [3,4,5], [6,7,8],  # Rows
+        [0,3,6], [1,4,7], [2,5,8],  # Columns
+        [0,4,8], [2,4,6]            # Diagonals
+    ]
+    for cond in win_conditions:
+        if all(board[i] == player for i in cond):
+            return True
+    return False
+
+# Main game loop
+def play_game():
+    current_player = 'X'
+    move_count = 0
+    print("Tic Tac Toe Game!")
+    print("Positions are numbered from 1 to 9 as follows:")
+    print(" 1 | 2 | 3\n---|---|---\n 4 | 5 | 6\n---|---|---\n 7 | 8 | 9")
+    
+    while move_count < 9:
+        print_board()
+        try:
+            move = int(input(f"Player {current_player}, enter your move (1-9): ")) - 1
+        except ValueError:
+            print("Invalid input. Please enter a number between 1 and 9.")
+            continue
+
+        if move < 0 or move > 8 or board[move] != ' ':
+            print("Invalid move. Try again.")
+            continue
+
+        board[move] = current_player
+        move_count += 1
+
+        if check_winner(current_player):
+            print_board()
+            print(f"🎉 Player {current_player} wins!")
+            return
+
+        current_player = 'O' if current_player == 'X' else 'X'
+
+    print_board()
+    print("It's a draw!")
+
+# Start the game
+play_game()
