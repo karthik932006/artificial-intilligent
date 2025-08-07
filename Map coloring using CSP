@@ -1,0 +1,50 @@
+# Regions and their neighbors
+neighbors = {
+    'WA': ['NT', 'SA'],
+    'NT': ['WA', 'SA', 'Q'],
+    'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+    'Q': ['NT', 'SA', 'NSW'],
+    'NSW': ['SA', 'Q', 'V'],
+    'V': ['SA', 'NSW'],
+    'T': []  # Tasmania has no land neighbors
+}
+
+colors = ['Red', 'Green', 'Blue']
+
+# Check if assignment is valid
+def is_valid(region, color, assignment):
+    for neighbor in neighbors[region]:
+        if neighbor in assignment and assignment[neighbor] == color:
+            return False
+    return True
+
+# Backtracking CSP solver
+def csp_backtrack(assignment):
+    # If all regions are assigned, return assignment
+    if len(assignment) == len(neighbors):
+        return assignment
+
+    # Select unassigned region
+    unassigned = [r for r in neighbors if r not in assignment]
+    region = unassigned[0]
+
+    for color in colors:
+        if is_valid(region, color, assignment):
+            assignment[region] = color
+            result = csp_backtrack(assignment)
+            if result:
+                return result
+            del assignment[region]
+
+    return None
+
+# Solve CSP
+solution = csp_backtrack({})
+
+# Output result
+if solution:
+    print("Map Coloring Solution:")
+    for region in sorted(solution):
+        print(f"{region}: {solution[region]}")
+else:
+    print("No solution found.")
