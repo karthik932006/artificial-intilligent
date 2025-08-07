@@ -1,0 +1,37 @@
+def vacuum_cleaner(environment, location):
+    steps = []
+    status = environment[location]
+
+    # Clean current room if dirty
+    if status == "Dirty":
+        environment[location] = "Clean"
+        steps.append(f"Location {location} is Dirty. Action: Suck.")
+
+    # Move to the other room
+    if location == "A":
+        steps.append("Move Right to Room B.")
+        location = "B"
+    else:
+        steps.append("Move Left to Room A.")
+        location = "A"
+
+    # Clean the other room if dirty
+    if environment[location] == "Dirty":
+        environment[location] = "Clean"
+        steps.append(f"Location {location} is Dirty. Action: Suck.")
+    else:
+        steps.append(f"Location {location} is already Clean. No Action.")
+
+    steps.append(f"Final Environment State: {environment}")
+    return steps
+
+# Example environment: A and B both dirty
+environment = {"A": "Dirty", "B": "Dirty"}
+location = "A"  # Vacuum starts in Room A
+
+# Run agent
+result = vacuum_cleaner(environment, location)
+
+# Output
+for step in result:
+    print(step)
